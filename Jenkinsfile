@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/leszko/calculator.git',
+                git url: 'https://github.com/Sarabac/jenktest.git',
                 branch: 'main'
             }
         }
@@ -19,12 +19,6 @@ pipeline {
         stage('Second Stage') {
             steps {
                 echo 'Step 3 in Stage 2: Good'
-            }
-        }
-
-        stage('third stage') {
-            steps {
-                echo 'Hmm let see'
             }
         }
     }
