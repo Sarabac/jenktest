@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/math")
 public class MathController {
 
+    private static final int constant = 0;
+
     @GetMapping("/sum/{a}/{b}")
     public Integer sum(@PathVariable("a") final int a, @PathVariable("b") final int b) {
-        return a + b;
+        
+        return a + b + constant;
     }
 
 }

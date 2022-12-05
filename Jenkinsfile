@@ -28,5 +28,15 @@ pipeline {
                 ])
             }
         }
+        stage('check style') {
+            steps {
+                sh './gradlew checkstyleMain'
+                publishHTML(target: [
+                    reportDir: 'build/reports/checkstyle',
+                    reportFiles: 'main.html',
+                    reportName: 'style check'
+                ])
+            }
+        }
     }
 }
