@@ -19,11 +19,4 @@ public class MathControllerTest {
         assertEquals(9, mathController.sum(a, b));
 
     }
-    @Test
-    void testSumFail() {
-        int a = 5;
-        int b = 5;
-        assertEquals(9, mathController.sum(a, b));
-
-    }
 }
