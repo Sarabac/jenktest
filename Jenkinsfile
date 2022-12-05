@@ -8,20 +8,14 @@ pipeline {
                 branch: 'master'
             }
         }
-        stage('First Stage') {
+        stage('Compile') {
                 steps {
-                    echo 'Step 1. Hello World'
-                    echo 'Step 2 in Stage 1: Whatsup'
+                    sh './gradlew compileJava'
                 }
         }
-        stage('Second Stage') {
+        stage('unit test') {
             steps {
-                echo 'Step 3 in Stage 2: Good'
-            }
-        }
-        stage('Stage 3') {
-            steps {
-                echo 'one more stage'
+                sh './gradlew test'
             }
         }
     }
