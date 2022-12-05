@@ -11,8 +11,6 @@ pipeline {
         stage('First Stage') {
                 steps {
                     echo 'Step 1. Hello World'
-                }
-                steps {
                     echo 'Step 2 in Stage 1: Whatsup'
                 }
         }
