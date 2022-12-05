@@ -7,11 +7,12 @@ pipeline {
                 git url: 'https://github.com/leszko/calculator.git',
                 branch: 'main'
             }
-            stage('First Stage') {
+            
+        }
+        stage('First Stage') {
                 steps {
                     echo 'Step 1. Hello World'
                 }
             }
-        }
     }
 }
