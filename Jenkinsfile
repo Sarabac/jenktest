@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Sarabac/jenktest.git',
-                branch: 'master'
+                git url: 'https://github.com/Sarabac/jenktest.git'
             }
         }
         stage('Compile') {
