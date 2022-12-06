@@ -7,6 +7,13 @@ pipeline {
                 git url: 'https://github.com/Sarabac/jenktest.git'
             }
         }
+        stage("build docker") {
+            steps {
+                sh 'docker build . -f ./Dockerfile -t lucas/testJenkins '
+            }
+        }
+
+
         stage('Compile') {
                 steps {
                     sh './gradlew compileJava'
