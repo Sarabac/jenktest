@@ -2,19 +2,11 @@ pipeline {
     agent any
     triggers { pollSCM('* * * * *') }
     stages {
-        /*
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/Sarabac/jenktest.git'
-            }
-        }
-        */
         stage('build docker') {
             steps {
                 sh 'docker build . -f ./Dockerfile -t lucas/test-calculator '
             }
         }
-
         stage('run unit test') {
             steps {
                 sh 'docker run --rm -p 8090:8090 -v /var/jenkins_home/reports:/usr/src/build/reports lucas/test-calculator gradle test'

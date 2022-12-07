@@ -1,1 +1,0 @@
-docker build . -f .\jenkins_docker\Dockerfile -t lucas/jenkins-docker

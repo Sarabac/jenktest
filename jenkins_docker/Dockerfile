@@ -27,10 +27,7 @@ RUN apt-get update && \
 
 # RUN docker run hello-world
 
-RUN mkdir /var/jenkins_home/reports
+RUN mkdir /var/reports
 
 EXPOSE 8080/tcp
 EXPOSE 50000/tcp 
-
-VOLUME /var/jenkins_home
-VOLUME /var/run/docker.sock 
