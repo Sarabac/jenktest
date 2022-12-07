@@ -33,11 +33,6 @@ pipeline {
             }
         }
 
-        post{
-            always{
-                sh 'docker image rm lucas/test-calculator'
-            }
-        }
 
 
 /*
@@ -68,4 +63,11 @@ pipeline {
         }
         */
     }
+
+    
+        post{
+            always{
+                sh 'docker image rm lucas/test-calculator'
+            }
+        }
 }
