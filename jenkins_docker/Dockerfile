@@ -27,7 +27,7 @@ RUN apt-get update && \
 
 # RUN docker run hello-world
 
-EXPOSE 8084/tcp
+EXPOSE 8080/tcp
 EXPOSE 50000/tcp 
 
 VOLUME /var/jenkins_home

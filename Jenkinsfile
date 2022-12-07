@@ -7,9 +7,21 @@ pipeline {
                 git url: 'https://github.com/Sarabac/jenktest.git'
             }
         }
+
+        stage('create test volume'){
+            steps {
+                sh 'docker volume create calculator-test-result'
+            }
+        }
         stage("build docker") {
             steps {
                 sh 'docker build . -f ./Dockerfile -t lucas/test-calculator '
+            }
+        }
+
+        stage("run test") {
+            steps {
+                sh 'docker run -it -p 8090:8090 -v calculator-test-result:/usr/src lucas/test-calculator'
             }
         }
 

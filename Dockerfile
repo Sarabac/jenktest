@@ -6,3 +6,5 @@ COPY . .
 RUN gradle compileJava --no-daemon 
 
 VOLUME /usr/src
+
+EXPOSE 8090/tcp
