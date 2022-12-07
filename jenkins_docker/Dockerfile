@@ -22,4 +22,13 @@ RUN apt-get update && \
    usermod -aG docker jenkins
 
 # drop back to the regular jenkins user - good practice
+
+RUN usermod -a -G docker jenkins
+
 USER jenkins
+
+EXPOSE 8084/tcp
+EXPOSE 50000/tcp 
+
+VOLUME /var/jenkins_home
+VOLUME /var/run/docker.sock 
