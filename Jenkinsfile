@@ -21,7 +21,7 @@ pipeline {
 
         stage("run test") {
             steps {
-                sh 'docker run -it -p 8090:8090 -v calculator-test-result:/usr/src lucas/test-calculator'
+                sh 'docker run -p 8090:8090 -v calculator-test-result:/usr/src lucas/test-calculator gradle test'
             }
         }
 
