@@ -15,7 +15,7 @@ pipeline {
 
         stage('run test') {
             steps {
-                sh 'docker run -p 8090:8090 -v /var/jenkins_home/reports:build/reports/jacoco/test/html lucas/test-calculator gradle test'
+                sh 'docker run -p 8090:8090 -v /var/jenkins_home/reports:/usr/src/build/reports/jacoco/test/html lucas/test-calculator gradle test'
             }
         }
 /*
