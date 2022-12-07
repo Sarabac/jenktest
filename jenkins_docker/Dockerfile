@@ -27,6 +27,8 @@ RUN apt-get update && \
 
 # RUN docker run hello-world
 
+RUN mkdir /var/jenkins_home/reports
+
 EXPOSE 8080/tcp
 EXPOSE 50000/tcp 
 

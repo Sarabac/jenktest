@@ -7,30 +7,18 @@ pipeline {
                 git url: 'https://github.com/Sarabac/jenktest.git'
             }
         }
-
-        stage('create test volume'){
-            steps {
-                sh 'docker volume create calculator-test-result'
-            }
-        }
-        stage("build docker") {
+        stage('build docker') {
             steps {
                 sh 'docker build . -f ./Dockerfile -t lucas/test-calculator '
             }
         }
 
-        stage("run test") {
+        stage('run test') {
             steps {
-                sh 'docker run -p 8090:8090 -v calculator-test-result:/usr/src lucas/test-calculator gradle test'
+                sh 'docker run -p 8090:8090 -v /var/jenkins_home/reports:build/reports/jacoco/test/html lucas/test-calculator gradle test'
             }
         }
-
-
-        stage('Compile') {
-                steps {
-                    sh './gradlew compileJava'
-                }
-        }
+/*
         stage('unit test') {
             steps {
                 sh './gradlew test'
@@ -56,5 +44,6 @@ pipeline {
                 ])
             }
         }
+        */
     }
 }
