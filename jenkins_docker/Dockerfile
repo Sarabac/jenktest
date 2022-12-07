@@ -23,9 +23,9 @@ RUN apt-get update && \
 
 # drop back to the regular jenkins user - good practice
 
-RUN usermod -a -G docker jenkins
+# USER jenkins
 
-USER jenkins
+# RUN docker run hello-world
 
 EXPOSE 8084/tcp
 EXPOSE 50000/tcp 
