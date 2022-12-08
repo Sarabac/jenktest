@@ -16,7 +16,9 @@ pipeline {
         stage('run unit test') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
+                    sh 'docker run --rm -p 8090:8090 \
+                    -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports \
+                    lucas/test-calculator gradle test'
                 }
             }
         }
@@ -24,7 +26,9 @@ pipeline {
         stage('run code coverage') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
+                    sh 'docker run --rm -p 8090:8090 \
+                    -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports \
+                    lucas/test-calculator gradle test jacocoTestReport'
                 }
             }
         }
@@ -32,14 +36,19 @@ pipeline {
         stage('run style check') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
+                    sh 'docker run --rm -p 8090:8090 \
+                    -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports \
+                    lucas/test-calculator gradle checkstyleMain'
                 }
             }
         }
 
         stage('publish test reports') {
             steps {
-                sh 'docker container run --rm -v jenkins_test_reports_$BRANCH_NAME:/from -v jenkins_docker_jenkins-test-report:/to alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
+                sh 'docker container run --rm \
+                -v jenkins_test_reports_$BRANCH_NAME:/from \
+                -v jenkins_docker_jenkins-test-report:/to \
+                alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
                 publishHTML(target: [
                     reportDir: '/var/reports/$BRANCH_NAME/jacoco/test/html',
                     reportFiles: 'index.html',
@@ -57,36 +66,7 @@ pipeline {
                 ])
             }
         }
-
-/*
-        stage('unit test') {
-            steps {
-                sh './gradlew test'
-            }
-        }
-        stage('code coverage') {
-            steps {
-                sh './gradlew test jacocoTestReport'
-                publishHTML(target: [
-                    reportDir: 'build/reports/jacoco/test/html',
-                    reportFiles: 'index.html',
-                    reportName: 'JaCoCo Report'
-                ])
-            }
-        }
-        stage('check style') {
-            steps {
-                sh './gradlew checkstyleMain'
-                publishHTML(target: [
-                    reportDir: 'build/reports/checkstyle',
-                    reportFiles: 'main.html',
-                    reportName: 'style check'
-                ])
-            }
-        }
-        */
     }
-
         post {
             always {
                 sh "docker volume rm jenkins_test_reports_$BRANCH_NAME"
