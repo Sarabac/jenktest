@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('create report dir') {
             steps {
-                sh "mkdir /var/reports/$BRANCH_NAME"
+                sh "mkdir -p /var/reports/$BRANCH_NAME"
             }
         }
         stage('build docker') {
