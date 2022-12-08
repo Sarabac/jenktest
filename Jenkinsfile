@@ -2,6 +2,11 @@ pipeline {
     agent any
     triggers { pollSCM('* * * * *') }
     stages {
+        stage('tell branch name') {
+            steps {
+                sh 'echo $BRANCH_NAME'
+            }
+        }
         stage('build docker') {
             steps {
                 sh 'docker build . -f ./Dockerfile -t lucas/test-calculator '
