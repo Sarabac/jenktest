@@ -14,7 +14,7 @@ pipeline {
         }
         stage('run unit test') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_/var/reports/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
+                sh 'docker run --rm -p 8090:8090 -v /var/reports/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
             }
         }
 
