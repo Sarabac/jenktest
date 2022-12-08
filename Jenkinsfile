@@ -5,6 +5,7 @@ pipeline {
         stage('create report dir') {
             steps {
                 sh "mkdir -p /var/reports/$BRANCH_NAME"
+                sh "docker volume create jenkins_test_reports_$BRANCH_NAME"
             }
         }
         stage('build docker') {
@@ -14,19 +15,25 @@ pipeline {
         }
         stage('run unit test') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v /var/reports/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
+                sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
             }
         }
 
         stage('run code coverage') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v /var/reports/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
+                sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
             }
         }
 
         stage('run style check') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v /var/reports/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
+                sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
+            }
+        }
+        
+        stage('publish test reports') {
+            steps {
+                sh 'docker container run --rm -it -v jenkins_test_reports_$BRANCH_NAME:/from -v jenkins_docker_jenkins-test-report:/to alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
             }
         }
 
@@ -64,6 +71,7 @@ pipeline {
     
         post{
             always{
+                sh "docker volume rm jenkins_test_reports_$BRANCH_NAME"
                 sh 'docker image rm lucas/test-calculator'
             }
         }
