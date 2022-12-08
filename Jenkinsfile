@@ -2,9 +2,9 @@ pipeline {
     agent any
     triggers { pollSCM('* * * * *') }
     stages {
-        stage('tell branch name') {
+        stage('create report dir') {
             steps {
-                sh 'echo $BRANCH_NAME'
+                sh "mkdir /var/reports/$BRANCH_NAME"
             }
         }
         stage('build docker') {
@@ -14,19 +14,19 @@ pipeline {
         }
         stage('run unit test') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_docker_jenkins-test-report:/usr/src/build/reports lucas/test-calculator gradle test'
+                sh 'docker run --rm -p 8090:8090 -v jenkins_docker_jenkins-test-report/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
             }
         }
 
         stage('run code coverage') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_docker_jenkins-test-report:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
+                sh 'docker run --rm -p 8090:8090 -v jenkins_docker_jenkins-test-report/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
             }
         }
 
         stage('run style check') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_docker_jenkins-test-report:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
+                sh 'docker run --rm -p 8090:8090 -v jenkins_docker_jenkins-test-report/$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
             }
         }
 
