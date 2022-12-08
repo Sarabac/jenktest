@@ -40,6 +40,21 @@ pipeline {
         stage('publish test reports') {
             steps {
                 sh 'docker container run --rm -v jenkins_test_reports_$BRANCH_NAME:/from -v jenkins_docker_jenkins-test-report:/to alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
+                publishHTML(target: [
+                    reportDir: '/var/reports/$BRANCH_NAME/jacoco/test/html',
+                    reportFiles: 'index.html',
+                    reportName: 'JaCoCo Report'
+                ])
+                publishHTML(target: [
+                    reportDir: '/var/reports/$BRANCH_NAME/checkstyle',
+                    reportFiles: 'main.html',
+                    reportName: 'Style Check'
+                ])
+                publishHTML(target: [
+                    reportDir: '/var/reports/$BRANCH_NAME/tests/test',
+                    reportFiles: 'index.html',
+                    reportName: 'Test Report'
+                ])
             }
         }
 
