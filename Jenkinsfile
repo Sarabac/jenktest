@@ -39,7 +39,7 @@ pipeline {
 
         stage('publish test reports') {
             steps {
-                sh 'docker container run --rm -it -v jenkins_test_reports_$BRANCH_NAME:/from -v jenkins_docker_jenkins-test-report:/to alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
+                sh 'docker container run --rm -v jenkins_test_reports_$BRANCH_NAME:/from -v jenkins_docker_jenkins-test-report:/to alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
             }
         }
 
