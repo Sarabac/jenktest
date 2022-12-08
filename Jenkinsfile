@@ -15,29 +15,33 @@ pipeline {
         }
         stage('run unit test') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test'
+                }
             }
         }
 
         stage('run code coverage') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle test jacocoTestReport'
+                }
             }
         }
 
         stage('run style check') {
             steps {
-                sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'docker run --rm -p 8090:8090 -v jenkins_test_reports_$BRANCH_NAME:/usr/src/build/reports lucas/test-calculator gradle checkstyleMain'
+                }
             }
         }
-        
+
         stage('publish test reports') {
             steps {
                 sh 'docker container run --rm -it -v jenkins_test_reports_$BRANCH_NAME:/from -v jenkins_docker_jenkins-test-report:/to alpine ash -c "cd /from ; cp -av . /to/$BRANCH_NAME"'
             }
         }
-
-
 
 /*
         stage('unit test') {
@@ -68,9 +72,8 @@ pipeline {
         */
     }
 
-    
-        post{
-            always{
+        post {
+            always {
                 sh "docker volume rm jenkins_test_reports_$BRANCH_NAME"
                 sh 'docker image rm lucas/test-calculator'
             }
