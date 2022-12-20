@@ -6,6 +6,4 @@ COPY . .
 RUN gradle compileJava --no-daemon 
 RUN mkdir /usr/src/build/reports
 
-VOLUME /usr/src/build/reports
-
 EXPOSE 8090/tcp

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  chrome:
+    image: selenium/standalone-chrome:4.7.2-20221219
+    container_name: "chrome"
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+  testing:
+    build:
+      dockerfile: api_testing.DOCKERFILE
+    depends_on:
+      - chrome
+
